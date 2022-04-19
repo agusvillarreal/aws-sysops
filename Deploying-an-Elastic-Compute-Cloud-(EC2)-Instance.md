@@ -123,5 +123,44 @@ InstanceID:
     InstanceType: t2.micro
 	ImageId: ami-0bdb1d6c15a40392c
 ```
+> 1. The resources Section is Mandatory: Resources is the only mandatory section of the CloudFormation template
+> 2. The Transform Section is for Referencing Addiotional Code: The transform section may be used to reference additional code stored in S3, allowing for code re-use, such as template snippets/reusable pieces of CloudFormation code, or Lambda code
+- **Infraestructure As Code**: CloudFormation allows yout to manage, configure, and provision AWS infraestucture as YAML or JSON code
+- **Parameters**: Input custom values
+- **Conditions**: Provision resources based on environment
+- **Resources**: This section is mandatory and describes the AWS resources that CloudFormation will create
+- **Mappings**: Allows you to create custom mappings like Region-AMI
+- **Transform**: Allows you to reference code located in S3, Lambda code or reusable snippets of CloudFormation code
 
+## Provisioning AWS Resources Using CloudFomrmation
+**YAML or JSON template** -> YAML or JSON templates are used to describe the end state of the infrastructure you are either provisioning or changing
+**S3** -> After creating the template, you upload it to CloudFormation using S3
+**API Calls** -> CloudFormation reads the template and makes the API calls on your behalf 
+**CloudFormation Stack** -> The resulting set of resources that CloudFormation builds from your template is called a stack
+
+## Troubleshooting CloudFormation
+ Use the CloudFormation console to view the status of your stack and error messages
+ - **Insufficient permissions** -> Add permissions for the resources you are trying to create, delete, or modify
+ - **Resource Limit Exceeded** -> Request a limit increase or delete unnecesary resources and retry
+ - **UPDATE_ROLLBACK_FAILED** -> Fix the causing the failure and retry
+
+## CloudFormation Demos
+Check the CloudFormation console for **error messages** when troubleshooting
+
+## CloudFormation StackSets
+Create, delete, and update your CloudFormation stacks across multiple AWS accounts and regions using a single operation
+
+Cross account roles -> For the Administrator account, use ``AWSCloudFormationStackSetAdministrationRole``, which is allowed to assume ``AWSCloudFormationStackSetExecutionRole`` to provision resources in the target accounts
+
+## CloudFormation Best pratices
+1. **IAM** Control access to CloudFormation using IAM
+2. **Service Limit** If you hit a limit, CloudFormation will fail to create your stack
+3. **Avoid Manual Updates** Manual updates cause errors when you try to update or delete the stack
+4. **Use CloudTrail** Use CloudTrail to track all changes, along with two made them
+5. **Use a Stack Policy** Protect critical stack resources from unintentional updates and mistakes caused by human error
+
+## Exploring Blue / Green Deployments
+1. Low risk Deployment Strategy
+2. Enables Testing
+3. Rollback is Fast and Easy
 
