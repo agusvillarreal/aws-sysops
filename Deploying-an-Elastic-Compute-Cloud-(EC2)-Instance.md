@@ -73,3 +73,49 @@ No registered targets
 
 ## Introduction to CloudFormation
 Manage, configure, and provison your AWS infrastructure as a Code
+> CloudFormation Template example
+```yaml
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Template to create an EC2 instance"
+Metadata:
+	Instances:
+	 Description: "Web Server Instance"
+
+Parameters: 	#input values
+	EnvType:
+	  Description: "Environment type"
+	  Type: String
+	  AllowedValues:
+	  	- prod
+		- test
+
+Conditions:
+  CreateProdResources: !Equal [ !Ref EnvType, prod ]
+  Mappings:		#e.g. set values based on a region
+  RegionMap:
+  	 eu-west-1:
+	  "ami": "ami-0bdb1d6c15a40392c"
+
+Mappings:		#e.g. set values based on a region
+ RegionMap:
+ 	eu-west-1:
+	 "ami": "ami-0bdb1d6c15a40392c"
+	 
+Transform: 		# include snippets of code ouside the main template
+  Name: 'AWS::Include'
+  Parameters:
+    Location: 's3://MyBucketName/MyFileName.yaml'
+	
+Resources: # the AWS resources you are deploying
+  EC2Instance:
+    Type: AWS::EC2::Instance
+	Properties:
+	Outputs:
+  InstanceID:
+  	Description: The Instance ID
+	Value: !Ref EC2Instance
+	  InstanceType: t3.micro
+	  ImageId: ami-0bdb1d6c15a40392c
+```
+
+
