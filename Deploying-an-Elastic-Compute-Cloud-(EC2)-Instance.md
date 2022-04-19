@@ -116,6 +116,12 @@ Resources: # the AWS resources you are deploying
 	Value: !Ref EC2Instance
 	  InstanceType: t3.micro
 	  ImageId: ami-0bdb1d6c15a40392c
+  Outputs:
+InstanceID:
+  Description: The instance ID
+  Value: !Red EC2Instance
+    InstanceType: t2.micro
+	ImageId: ami-0bdb1d6c15a40392c
 ```
 
 
