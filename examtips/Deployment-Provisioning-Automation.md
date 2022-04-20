@@ -7,46 +7,58 @@ EC2 is like a virtual machine (VM), hosted in AWS instead of your own data cente
 - Pay what you use
 - Wait minutes
 
-## Elastic Load Balancer
+## Elastic Block Store - SSD Volumes
+Highly available and scalable storage volumes you can attach to an EC2 instances
  | gp2 General Purpose SSD                          | io1 Provisioned IOPS SSD                                      | io2 Provisioned IOPS SSD |
  | ------------------------------------------------ | ------------------------------------------------------------- | ------------------------ |
  | Suitable for boot disks and general applications | Suitable for OLTP and latency-sensitive applications          |   Suitable for OLTP and latency-sensitive applications                          |
  | Up to 16,000 IOPS per volume                     | 50 IOPS / GiB // Up to 64,000 IOPS per volume                 |   500 IOPS / GiB // Up to 64,000 IOPS per volume                       |
  | Up to 99.9% durability                           | High performance and most expensive // UP to 99.9% durability |   Latest generation Provisioned IOPS volume // UP to 99.999% durability                     |
 
+| st1 - Throughput Optimized HDD                 | sc1 - Cold HDD                        |
+| ---------------------------------------------- | ------------------------------------- |
+| Suitable for Big Data, datawarehouse, and ETL | Max troughput of 250 MB/s per volume  |
+| Max throughput is 500 MB/s per volume          | Less-frequently-accessed data         |
+| Cannot be a boot volume                        | Cannot be a boot volume               |
+| Up to 99.9% durability                         | Lowest cost // Up to 99.9% durability | 
+
 ## Bastion Host
 1. Conenct to Private Instances: A bastion host enables you to connect to private instances in your VPC from an untrusted network using **SSH** or **RDP**
 2. Public Subnet: A **bastion** is in a public subnet and is reachable from the instances
-3. Security Groups: You need to configure the security group associated with the **private subnet** to enable SSH / RDP access from the bastion 
+3. Security Groups: You need to configure the security group associated with the **private subnet** to enable SSH / RDP access from the bastion
+
+#### SSH -> Bastion -> Private instance (security group)
 
 ## Elastic Load Balancer
 - **Application Load Balancer**: HTTP/HTTPS. Inteligent load balancing. Routes request to a specific web server based on the type of request
 - **Network Load Balancers**: Provides high-performance load balancing for TCP traffic
-- **Classic Load Balancers**: The legacy optio that supports both HTTP/HTTPS and TCP. May still appear in the exam
+- **Classic Load Balancers**: The legacy option that supports both HTTP/HTTPS and TCP. May still appear in the exam
 - **Gateway Load Balancers**: Provides load balancing for third-party virtual appliances, like firewalls, Intrusion Detection and Preventions Systems
 -  **X-Forwarded-For**: If you need the IPv4 address of your end user, look for the _X-Forwarded-For_ header
 
 ## Load Balancer Error Messages
 Client-Side or Server-Side?
-4xx is a client-side error
-5xx is a server-side error
+- 4xx is a client-side error
+- 5xx is a server-side error
 
 #### HTTP 504 - Gateway Timeout
-The Elastic Load balancer could not establish a connection to the target
+The Elastic Load balancer could not establish a connection to the target  
 **Something is wrong with your application. Identify where the application is failing and fix the problem**
 
 #### HTTP 502 - Bad Gateway
-The target host is unreachable
+The target host is unreachable  
 **Check that your security groups allow traffic from the load balancer to the target hosts**
 
 #### HTTP 503 - Unavailable
-No registered targets
+No registered targets  
 **Check you have targets registered**
 
 ## CloudWatch Metrics Exam Tips
 - HealthyHostCount
 - UnHelathyHostCount
 - RequestCount
+- TargetResponseTime
+- HTTP Status Codes
 
 ## Elastic Load Balancer Access Logs
 - **Access Logs** -> Capture information relating to incoming request to your Elastic Load Balancer
@@ -60,11 +72,11 @@ No registered targets
 
 ## Disovering EC2 image builder
 1. Automates the process of creating and maintaining AMI and Container images
-2. 4 step process: Select a base OS image, customize by adding softwarre, test, and distribute to your chosen region
-3. Terminology:
-	- Image pipeline: Settings and process
-	- Image recipe: Source image and build components
-	- Build components: The software to include
+2. 4 step process: 1- Select a base OS image, 2- customize by adding software, 3- test, and 4- distribute to your chosen region
+4. Terminology:
+	- _Image pipeline_: Settings and process
+	- _Image recipe_: Source image and build components
+	- _Build components_: The software to include
 
 1. Base OS: Provide a base OS image. e.g. Amazon Linux 2 AMI
 2. Software: Define software to install e.g. .Net, Node.js, Python, latest security updates, latest kernel, security settigns
@@ -72,7 +84,7 @@ No registered targets
 4. Distribute: Distribute the image to the regions of your choice you are operating in
 
 ## Introduction to CloudFormation
-Manage, configure, and provison your AWS infrastructure as a Code
+Manage, configure, and provison your AWS infrastructure as a Code  
 > CloudFormation Template example
 ```yaml
 AWSTemplateFormatVersion: "2010-09-09"
@@ -148,9 +160,9 @@ InstanceID:
 Check the CloudFormation console for **error messages** when troubleshooting
 
 ## CloudFormation StackSets
-Create, delete, and update your CloudFormation stacks across multiple AWS accounts and regions using a single operation
-
-Cross account roles -> For the Administrator account, use ``AWSCloudFormationStackSetAdministrationRole``, which is allowed to assume ``AWSCloudFormationStackSetExecutionRole`` to provision resources in the target accounts
+- Create, delete, and update your CloudFormation stacks across multiple AWS accounts and regions using a single operation
+- Cross account roles -> For the Administrator account, use ``AWSCloudFormationStackSetAdministrationRole``, which is allowed to assume ``AWSCloudFormationStackSetExecutionRole`` to provision resources in the target accounts
+- Resource Access Manager -> Allows you to share resources with other accounts, e.g. EC2 instances, S3 buckets, and EC2 Image Builder images.
 
 ## CloudFormation Best pratices
 1. **IAM** Control access to CloudFormation using IAM
@@ -160,9 +172,9 @@ Cross account roles -> For the Administrator account, use ``AWSCloudFormationSta
 5. **Use a Stack Policy** Protect critical stack resources from unintentional updates and mistakes caused by human error
 
 ## Exploring Blue / Green Deployments
-1. Low risk Deployment Strategy
-2. Enables Testing
-3. Rollback is Fast and Easy
+1. Low risk Deployment Strategy -> Blue is the **current version** of the application. Green is the **new version**
+2. Enables Testing -> After testing is completre, live traffic can be directed to the new version
+3. Rollback is Fast and Easy -> If something goes wrong after the version is being used in production, simply redirect all traffic to the original environment
 
 ## Understanding Rolling Deployments
 - **Batchers** -> Deploy new application versions and other changes in batches
@@ -175,6 +187,7 @@ An **early warning system** that can indicate that something is wrong in your ap
 - **DEPLOY** -> Deploy the new version to a small number of servers
 - **DIRECT** -> Direct a small proportion of customer traffic to the new version, e.g., 10%
 - **ENABLES CANARY TESTING** -> Test your application with a small proportion of real customers before you roll out to everybody
+Reduces the risk of deploying a new application version when working with a production environment, e.g., **installing new or new packages**
 
 ## Automating task using AWS Systems Manager
 1. Managment tool
