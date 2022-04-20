@@ -164,3 +164,36 @@ Cross account roles -> For the Administrator account, use ``AWSCloudFormationSta
 2. Enables Testing
 3. Rollback is Fast and Easy
 
+## Understanding Rolling Deployments
+- **Batchers** -> Deploy new application versions and other changes in batches
+- **Cost effective** -> You can set the batch size and the minimun number of servers to keep in service
+- **Complexity** -> Mixed environment. Rolling back involves a re-deployment
+
+## When to use canary Deployments
+_Remember the canary in the coal mine_
+An **early warning system** that can indicate that something is wrong in your application
+- **DEPLOY** -> Deploy the new version to a small number of servers
+- **DIRECT** -> Direct a small proportion of customer traffic to the new version, e.g., 10%
+- **ENABLES CANARY TESTING** -> Test your application with a small proportion of real customers before you roll out to everybody
+
+## Automating task using AWS Systems Manager
+1. Managment tool
+2. Inventory of your EC2 instances
+3. Automation
+**Visibility and control** of your AWS infraestructure of your AWS infrastructure at scale
+- **INVENTORY AND AUTOMATION** -> Organize your inventory and logically group resources together, allowing you to automate boring task 
+- **RUN COMMAND** -> Perform common operational tasks on groups of instances simultaneosly without logging in to each one
+- **PATCH MANAGER** -> Patch multiple EC2 instances simultaneoly
+
+## Implementing automating patching using AWS systems manager
+_We can use AWS Systems Manager to pach multiple EC2 instances simultaneously_ -> Patch manager
+
+## Using AWS Systems Manager EC2 Run Command
+You can use EC2 Run Command to securely run a command on multiple EC2 instances simultaneosly without logging in to each one. SSH, RDP, or a bastion host is not required
+
+## Understanding OpsWorks
+A configuration management service allowing you to centrally manage the Operating System and/or application configurations on EC2 and on-premise systems
+- **Automated configuration management service**, compatible with Puppet and Chef
+- **CONFIGURATION AS CODE** -> Operating systmes, application settings, packages
+- **MANAGED SERVICE** -> Managed instances of Puppet or Chef
+- **OPSWORKS STACKS** -> Models your application as a stack consisting of multiple layersm e.g. database, web server, application, load balancer, etc.
