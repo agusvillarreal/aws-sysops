@@ -44,3 +44,38 @@ Use Case -> Receive **CloudWatch alerts** for specific errors, warnings, or mesa
 
 ### Health events
 AWS Health: Provides information about **changes in the health** of AWS resources -> EventBridge: **Can send health events** to EventBridge (was CloudWatch) -> CloudWatch Alarm: ...**triggerin** a CloudWatch -> Trigger an Action: Send an SNS notification, send a message to sqs, or trigger a Lambda function 
+
+## Creating CloudWatch
+- Alarm -> You can use an alarm to notify you when a threshold is hit 
+- Use Case -> You can create an alarm for any metric, e.g. `CPUUtilization`
+- Email Notifications -> CloudWatch can also send you email notifications using an SNS topic
+
+## Introduction to CloudTrail
+Records user activity in your AWS account
+Records events related to **creation, modification, or deletion of resources** (such as IAM users, S3 buckets, and EC2 instances)
+CloudTrail logs all the API calls that are made in yout AWS account
+1. Audit Trail: **Who**, **when**, **what**, **where**, source IP, request parameters, and response
+2. Use cases: **Incident investigation**, near real-time security analysis of user activity, and compliance
+3. S3: **90 days history by default** Create your own trail in the console to store CloudTrail logs indefinitely in S3 
+
+## Working with CloudTrail
+- Enable by Default -> 90 day's event history
+- Your Own Trail -> Create your own trail to store the data for more than 90 days
+- Encrypted -> By default, when you create a trail in the console, the dara is encrypted and stored in S3
+
+## AWS Config 101
+Continously monitors the configuration of your AWS resources
+- Configurarion Monitoring -> Continuosly monitors the configuration of your AWS resources for compliance, with a desired state that you define
+- Dashboard -> Provides an inventory, and shows compliance and non-compliance
+- Rules -> Define the desired state of your resource configuration, e.g.: 
+	- `s3-bucket-public-read-prohibited`
+	- `cloud-trail-encryption-enables`
+	- `ec2-ebss-encryption-by-default`
+- Conformance Packs -> A set of rules managed as one, e.g. Operational Best Practices for S3, EC2, IAM, etc.
+- Automati  Remediation -> Remediates non-compliant resources by triggering an action that you define, e.g. stop or terminate a non-compliant instances
+
+## Using AWS Config
+Continuosly monitors the configuration of your AWS resources
+- Monitors Configuration: Monitors the configuration of your AWS resources for compliance, with a desired state that you define
+- Rules Define: The desired configuration state of your resources
+- Dashboard Inventory: Provides an inventory, and shows compliance and non-compliance
